@@ -15,9 +15,13 @@ func TestCleanInput(t *testing.T) {
 			input:    " hello world ",
 			expected: []string{"hello", "world"},
 		},
+		{
+			input:    "SoMe CrazY Text ",
+			expected: []string{"some", "crazy", "text"},
+		},
 	}
 	for _, c := range testCases {
-		actual := cleanInput(c.input)
+		actual := CleanInput(c.input)
 		for i := range c.expected {
 			if actual[i] != c.expected[i] {
 				t.Errorf("not equal: %v, %v", actual[i], c.expected[i])

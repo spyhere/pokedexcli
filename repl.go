@@ -2,6 +2,9 @@ package main
 
 import "strings"
 
-func cleanInput(text string) []string {
-	return strings.Split(strings.TrimSpace(text), " ")
+func CleanInput(text string) []string {
+	return strings.Split(
+		strings.ToLower(strings.TrimSpace(text)),
+		" ",
+	)
 }
