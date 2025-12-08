@@ -10,6 +10,7 @@ import (
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	commands := GetCommands()
+	config := &Config{}
 	for {
 		fmt.Print("Pokedex > ")
 		ok := scanner.Scan()
@@ -19,9 +20,12 @@ func main() {
 		first_word := CleanInput(scanner.Text())[0]
 		command, ok := commands[first_word]
 		if !ok {
-			commands["help"].cb()
+			commands["help"].cb(config)
 			continue
 		}
-		command.cb()
+		err := command.cb(config)
+		if err != nil {
+			log.Fatal("unexpected: %w", err)
+		}
 	}
 }

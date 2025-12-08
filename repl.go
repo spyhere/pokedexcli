@@ -6,10 +6,15 @@ import (
 	"strings"
 )
 
+type Config struct {
+	Next     string
+	Previous string
+}
+
 type cliCommand struct {
 	name        string
 	description string
-	cb          func() error
+	cb          func(*Config) error
 }
 
 func GetCommands() map[string]cliCommand {
@@ -24,6 +29,16 @@ func GetCommands() map[string]cliCommand {
 			description: "Read help of Pokedex",
 			cb:          commandHelp,
 		},
+		"map": {
+			name:        "map",
+			description: "Show next 20 locations",
+			cb:          commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Show previous 20 locations",
+			cb:          commandMapb,
+		},
 	}
 }
 
@@ -34,13 +49,13 @@ func CleanInput(text string) []string {
 	)
 }
 
-func commandExit() error {
+func commandExit(c *Config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp() error {
+func commandHelp(c *Config) error {
 	commandDescription := ""
 	for _, it := range GetCommands() {
 		commandDescription += fmt.Sprintf("%s: %s\n", it.name, it.description)
@@ -49,5 +64,39 @@ func commandHelp() error {
 Usage:
 
 %s`, commandDescription)
+	return nil
+}
+
+func commandMap(c *Config) error {
+	var url string
+	if len(c.Next) > 0 {
+		url = c.Next
+	}
+	res, err := PokeGet(url)
+	if err != nil {
+		return err
+	}
+	c.Next = res.Next
+	c.Previous = res.Previous
+	for _, it := range res.Results {
+		fmt.Println(it.Name)
+	}
+	return nil
+}
+
+func commandMapb(c *Config) error {
+	if len(c.Previous) == 0 {
+		fmt.Println("You are on the first page")
+		return nil
+	}
+	res, err := PokeGet(c.Previous)
+	if err != nil {
+		return err
+	}
+	c.Next = res.Next
+	c.Previous = res.Previous
+	for _, it := range res.Results {
+		fmt.Println(it.Name)
+	}
 	return nil
 }
