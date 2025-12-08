@@ -12,6 +12,14 @@ type testCase struct {
 func TestCleanInput(t *testing.T) {
 	testCases := []testCase{
 		{
+			input:    " ",
+			expected: []string{},
+		},
+		{
+			input:    " hello ",
+			expected: []string{"hello"},
+		},
+		{
 			input:    " hello world ",
 			expected: []string{"hello", "world"},
 		},
