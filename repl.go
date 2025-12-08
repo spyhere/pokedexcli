@@ -37,7 +37,7 @@ Usage:
 }
 
 func commandMap(c *Config) error {
-	if len(c.Next) == 0 {
+	if len(c.Next) == 0 && len(c.Previous) != 0 {
 		fmt.Println("You are on the last page")
 		return nil
 	}
