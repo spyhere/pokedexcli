@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/spyhere/pokedexcli/poke"
 	"os"
 	"strings"
 )
@@ -41,7 +42,7 @@ func commandMap(c *Config) error {
 		fmt.Println("You are on the last page")
 		return nil
 	}
-	res, err := PokeGet(c.Next)
+	res, err := poke.API.LocationArea.Get(c.Next)
 	if err != nil {
 		return err
 	}
@@ -58,7 +59,7 @@ func commandMapb(c *Config) error {
 		fmt.Println("You are on the first page")
 		return nil
 	}
-	res, err := PokeGet(c.Previous)
+	res, err := poke.API.LocationArea.Get(c.Previous)
 	if err != nil {
 		return err
 	}
