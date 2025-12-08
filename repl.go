@@ -68,11 +68,11 @@ Usage:
 }
 
 func commandMap(c *Config) error {
-	var url string
-	if len(c.Next) > 0 {
-		url = c.Next
+	if len(c.Next) == 0 {
+		fmt.Println("You are on the last page")
+		return nil
 	}
-	res, err := PokeGet(url)
+	res, err := PokeGet(c.Next)
 	if err != nil {
 		return err
 	}
