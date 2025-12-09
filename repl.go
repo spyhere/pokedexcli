@@ -42,7 +42,10 @@ func commandMap(c *Config) error {
 		fmt.Println("You are on the last page")
 		return nil
 	}
-	res, err := poke.API.LocationArea.Get(c.Next)
+	if c.Next == "" {
+		c.Next = poke.API.LocationArea
+	}
+	res, err := poke.Get[poke.LocationsPaginatedResult](c.Next)
 	if err != nil {
 		return err
 	}
@@ -59,7 +62,7 @@ func commandMapb(c *Config) error {
 		fmt.Println("You are on the first page")
 		return nil
 	}
-	res, err := poke.API.LocationArea.Get(c.Previous)
+	res, err := poke.Get[poke.LocationsPaginatedResult](c.Previous)
 	if err != nil {
 		return err
 	}
