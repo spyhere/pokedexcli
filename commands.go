@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-
-	"github.com/spyhere/pokedexcli/internal/pokeclient"
 )
 
 type cliCommand struct {
@@ -66,10 +64,7 @@ func commandMap(c *Config, _ ...string) error {
 		fmt.Println("You are on the last page")
 		return nil
 	}
-	if c.Next == "" {
-		c.Next = pokeclient.API.LocationArea
-	}
-	res, err := pokeclient.Get[pokeclient.LocationsPaginatedResult](c.Next)
+	res, err := c.Client.GetLocationAreas(c.Next)
 	if err != nil {
 		return err
 	}
@@ -86,7 +81,7 @@ func commandMapb(c *Config, _ ...string) error {
 		fmt.Println("You are on the first page")
 		return nil
 	}
-	res, err := pokeclient.Get[pokeclient.LocationsPaginatedResult](c.Previous)
+	res, err := c.Client.GetLocationAreas(c.Previous)
 	if err != nil {
 		return err
 	}
@@ -98,13 +93,12 @@ func commandMapb(c *Config, _ ...string) error {
 	return nil
 }
 
-func commandExplore(_ *Config, args ...string) error {
+func commandExplore(c *Config, args ...string) error {
 	location := args[0]
 	if location == "" {
 		return fmt.Errorf("Didn't receive any location")
 	}
-	url := pokeclient.API.LocationArea + location
-	res, err := pokeclient.Get[pokeclient.LocationResult](url)
+	res, err := c.Client.GetLocationArea(location)
 	if err != nil {
 		return err
 	}
