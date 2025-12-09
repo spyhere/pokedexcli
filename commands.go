@@ -45,6 +45,11 @@ func GetCommands() map[string]cliCommand {
 			description: "Try to catch the pokemon by name",
 			cb:          commandCatch,
 		},
+		"inspect": {
+			name:        "inspect",
+			description: "Inspect the stats of the pokemon in your possession",
+			cb:          commandInspect,
+		},
 	}
 }
 
@@ -140,5 +145,19 @@ func commandCatch(c *Config, args ...string) error {
 	} else {
 		fmt.Println(res.Name, "escaped!")
 	}
+	return nil
+}
+
+func commandInspect(c *Config, args ...string) error {
+	pokemonName := args[0]
+	if pokemonName == "" {
+		fmt.Printf("No pokemon name were given!")
+	}
+	pokemon, ok := c.Pokedex[pokemonName]
+	if !ok {
+		fmt.Printf("You haven't caught %s yet!\n", pokemonName)
+		return nil
+	}
+	fmt.Print(GetPokemonString(pokemon))
 	return nil
 }

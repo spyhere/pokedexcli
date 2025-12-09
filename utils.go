@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/spyhere/pokedexcli/internal/pokeClient"
@@ -63,5 +64,36 @@ func PokemonInit(res *pokeClient.PokemonResponse) Pokemon {
 		},
 		Types: types,
 	}
+}
 
+func GetPokemonString(pokemon Pokemon) string {
+	pokemonTypes := ""
+	for _, it := range pokemon.Types {
+		pokemonTypes += " -" + it
+	}
+	output := fmt.Sprintf(`Name: %s
+Height: %d
+Weight: %d
+Stats:
+ -hp: %d
+ -attack: %d
+ -defense: %d
+ -special-attack: %d
+ -special-defense: %d
+ -speed: %d
+Types:
+%s
+`,
+		pokemon.Name,
+		pokemon.Height,
+		pokemon.Weight,
+		pokemon.Stats.HP,
+		pokemon.Stats.Attack,
+		pokemon.Stats.Defense,
+		pokemon.Stats.SpecialAttack,
+		pokemon.Stats.SpecialDefense,
+		pokemon.Stats.Speed,
+		pokemonTypes,
+	)
+	return output
 }
