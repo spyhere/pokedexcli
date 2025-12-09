@@ -4,23 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"strings"
-
-	"github.com/spyhere/pokedexcli/internal/pokeClient"
 )
-
-type Config struct {
-	Next     string
-	Previous string
-	Client   pokeClient.Client
-}
-
-func CleanInput(text string) []string {
-	return strings.Split(
-		strings.ToLower(strings.TrimSpace(text)),
-		" ",
-	)
-}
 
 func Repl(c *Config, scanner *bufio.Scanner, commands map[string]cliCommand) {
 	for {
@@ -41,7 +25,7 @@ func Repl(c *Config, scanner *bufio.Scanner, commands map[string]cliCommand) {
 		}
 		err := command.cb(c, args...)
 		if err != nil {
-			log.Fatal("unexpected: %w", err)
+			log.Fatal(err)
 		}
 	}
 }

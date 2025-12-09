@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math"
+	"math/rand"
 	"os"
 )
 
@@ -37,6 +39,11 @@ func GetCommands() map[string]cliCommand {
 			name:        "explore",
 			description: "Let you explore pokemons in specific location area",
 			cb:          commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Try to catch the pokemon by name",
+			cb:          commandCatch,
 		},
 	}
 }
@@ -107,5 +114,31 @@ func commandExplore(c *Config, args ...string) error {
 		foundPokemon += "- " + pokemonEncounters.Pokemon.Name + "\n"
 	}
 	fmt.Printf("Found Pokemon:\n%s", foundPokemon)
+	return nil
+}
+
+func commandCatch(c *Config, args ...string) error {
+	pokemonName := args[0]
+	if pokemonName == "" {
+		return fmt.Errorf("Didn't receive any pokemon name")
+	}
+	res, err := c.Client.GetPokemon(pokemonName)
+	if err != nil {
+		return err
+	}
+	if _, ok := c.Pokedex[res.Name]; ok {
+		fmt.Printf("You already have %s in your Pokedex!\n", res.Name)
+		return nil
+	}
+
+	fmt.Printf("Throwing a Pokeball at %s...\n", res.Name)
+	random := rand.Intn(res.BaseExperience)
+	catchThreshold := int(math.Min(50.0, float64(res.BaseExperience)*0.8))
+	if random <= catchThreshold {
+		fmt.Println(res.Name, "was caught!")
+		c.Pokedex[res.Name] = PokemonInit(&res)
+	} else {
+		fmt.Println(res.Name, "escaped!")
+	}
 	return nil
 }

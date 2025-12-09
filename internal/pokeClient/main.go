@@ -1,13 +1,14 @@
 package pokeClient
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
 
-	"github.com/spyhere/pokedexcli/internal/pokeCache"
+	pokecache "github.com/spyhere/pokedexcli/internal/pokeCache"
 )
 
 type Client struct {
@@ -46,6 +47,21 @@ func (c *Client) GetLocationArea(locationName string) (LocationResult, error) {
 	var res LocationResult
 	if err := json.Unmarshal(bytes, &res); err != nil {
 		return LocationResult{}, err
+	}
+	return res, nil
+}
+
+func (c *Client) GetPokemon(pokemonName string) (PokemonResponse, error) {
+	url := c.baseUrl + "pokemon/" + pokemonName
+	bts, err := httpGet(url, &c.cache)
+	if err != nil {
+		return PokemonResponse{}, err
+	}
+	var res PokemonResponse
+	bReader := bytes.NewReader(bts)
+	decoder := json.NewDecoder(bReader)
+	if err := decoder.Decode(&res); err != nil {
+		return PokemonResponse{}, err
 	}
 	return res, nil
 }
