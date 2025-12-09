@@ -17,13 +17,17 @@ func main() {
 		if !ok {
 			log.Fatal("failed reading the text")
 		}
-		first_word := CleanInput(scanner.Text())[0]
-		command, ok := commands[first_word]
+		words := CleanInput(scanner.Text())
+		args := []string{}
+		if len(words) > 1 {
+			args = words[1:]
+		}
+		command, ok := commands[words[0]]
 		if !ok {
-			commands["help"].cb(config)
+			commands["help"].cb(config, args...)
 			continue
 		}
-		err := command.cb(config)
+		err := command.cb(config, args...)
 		if err != nil {
 			log.Fatal("unexpected: %w", err)
 		}

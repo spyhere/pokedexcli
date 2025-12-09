@@ -19,13 +19,20 @@ func CleanInput(text string) []string {
 	)
 }
 
-func commandExit(c *Config) error {
+func parseWords(slice []string) (command, argument string) {
+	if len(slice) > 1 {
+		argument = slice[1]
+	}
+	return slice[0], argument
+}
+
+func commandExit(c *Config, _ ...string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(c *Config) error {
+func commandHelp(c *Config, _ ...string) error {
 	commandDescription := ""
 	for _, it := range GetCommands() {
 		commandDescription += fmt.Sprintf("%s: %s\n", it.name, it.description)
@@ -37,7 +44,7 @@ Usage:
 	return nil
 }
 
-func commandMap(c *Config) error {
+func commandMap(c *Config, _ ...string) error {
 	if len(c.Next) == 0 && len(c.Previous) != 0 {
 		fmt.Println("You are on the last page")
 		return nil
@@ -57,7 +64,7 @@ func commandMap(c *Config) error {
 	return nil
 }
 
-func commandMapb(c *Config) error {
+func commandMapb(c *Config, _ ...string) error {
 	if len(c.Previous) == 0 {
 		fmt.Println("You are on the first page")
 		return nil
@@ -71,5 +78,23 @@ func commandMapb(c *Config) error {
 	for _, it := range res.Results {
 		fmt.Println(it.Name)
 	}
+	return nil
+}
+
+func commandExplore(_ *Config, args ...string) error {
+	location := args[0]
+	if location == "" {
+		return fmt.Errorf("Didn't receive any location")
+	}
+	url := poke.API.LocationArea + location
+	res, err := poke.Get[poke.LocationResult](url)
+	if err != nil {
+		return err
+	}
+	foundPokemon := ""
+	for _, pokemonEncounters := range res.PokemonEncounters {
+		foundPokemon += "- " + pokemonEncounters.Pokemon.Name + "\n"
+	}
+	fmt.Printf("Found Pokemon:\n%s", foundPokemon)
 	return nil
 }

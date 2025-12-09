@@ -11,7 +11,7 @@ import (
 )
 
 var API = Api{
-	LocationArea: "https://pokeapi.co/api/v2/location-area",
+	LocationArea: "https://pokeapi.co/api/v2/location-area/",
 }
 var cache = pokecache.NewCache(time.Minute * 1)
 
