@@ -1,4 +1,4 @@
-package pokecache
+package pokeCache
 
 import (
 	"fmt"
@@ -12,8 +12,9 @@ type cacheEntry struct {
 }
 
 type Cache struct {
-	data     map[string]cacheEntry
-	mu       sync.RWMutex
+	data map[string]cacheEntry
+	mu   sync.RWMutex
+
 	interval time.Duration
 }
 
