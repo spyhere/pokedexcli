@@ -28,8 +28,8 @@ func Get[T pokeResult](url string) (T, error) {
 }
 
 func httpGet(url string) ([]byte, error) {
-	cachedRes, ok := cache.Get(url)
-	if ok != nil {
+	cachedRes, err := cache.Get(url)
+	if err == nil {
 		return cachedRes, nil
 	}
 	res, err := http.Get(url)
