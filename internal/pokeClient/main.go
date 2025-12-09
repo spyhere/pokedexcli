@@ -1,4 +1,4 @@
-package pokeclient
+package pokeClient
 
 import (
 	"encoding/json"

@@ -1,8 +1,4 @@
-package pokeclient
-
-type pokeResult interface {
-	LocationsPaginatedResult | LocationResult
-}
+package pokeClient
 
 type LocationsPaginatedResult struct {
 	Count    int    `json:"count,omitempty"`

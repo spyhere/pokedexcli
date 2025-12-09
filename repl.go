@@ -6,13 +6,13 @@ import (
 	"log"
 	"strings"
 
-	"github.com/spyhere/pokedexcli/internal/pokeclient"
+	"github.com/spyhere/pokedexcli/internal/pokeClient"
 )
 
 type Config struct {
 	Next     string
 	Previous string
-	Client   pokeclient.Client
+	Client   pokeClient.Client
 }
 
 func CleanInput(text string) []string {
