@@ -50,10 +50,10 @@ func GetCommands() map[string]cliCommand {
 			description: "Inspect the stats of the pokemon in your possession",
 			cb:          commandInspect,
 		},
-		"possessions": {
-			name:        "possessions",
+		"pokedex": {
+			name:        "pokedex",
 			description: "Display pokemons that you have caught",
-			cb:          commandPossessions,
+			cb:          commandPokedex,
 		},
 	}
 }
@@ -168,7 +168,7 @@ func commandInspect(c *Config, args ...string) error {
 	return nil
 }
 
-func commandPossessions(c *Config, args ...string) error {
+func commandPokedex(c *Config, args ...string) error {
 	if len(c.Pokedex) == 0 {
 		fmt.Println("You haven't caught a single pokemon yet!")
 		return nil
@@ -177,6 +177,6 @@ func commandPossessions(c *Config, args ...string) error {
 	for key := range c.Pokedex {
 		output += " -" + key + "\n"
 	}
-	fmt.Printf("You have caught:\n%s", output)
+	fmt.Printf("Your Pokedex:\n%s", output)
 	return nil
 }
