@@ -16,7 +16,7 @@ func main() {
 			"https://pokeapi.co/api/v2/",
 			time.Second*10,
 		),
-		Pokedex: map[string]Pokemon{},
+		Pokedex: map[string]pokeClient.PokemonResponse{},
 	}
 	Repl(config, scanner, commands)
 }

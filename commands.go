@@ -146,7 +146,7 @@ func commandCatch(c *Config, args ...string) error {
 	catchThreshold := int(math.Min(50.0, float64(res.BaseExperience)*0.8))
 	if random <= catchThreshold {
 		fmt.Println(res.Name, "was caught!")
-		c.Pokedex[res.Name] = PokemonInit(&res)
+		c.Pokedex[res.Name] = res
 	} else {
 		fmt.Println(res.Name, "escaped!")
 	}
