@@ -1,4 +1,4 @@
-package poke
+package pokeclient
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/spyhere/pokedexcli/internal/pokecache"
+	"github.com/spyhere/pokedexcli/internal/pokeCache"
 )
 
 var API = Api{

@@ -1,4 +1,4 @@
-package poke
+package pokeclient
 
 type pokeResult interface {
 	LocationsPaginatedResult | LocationResult
