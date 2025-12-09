@@ -13,7 +13,7 @@ import (
 var API = Api{
 	LocationArea: "https://pokeapi.co/api/v2/location-area",
 }
-var cache = pokecache.NewCache(time.Second * 5)
+var cache = pokecache.NewCache(time.Minute * 1)
 
 func Get[T pokeResult](url string) (T, error) {
 	var res T
