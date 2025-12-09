@@ -67,19 +67,22 @@ func (c *Client) GetPokemon(pokemonName string) (PokemonResponse, error) {
 }
 
 func httpGet(url string, cache *pokecache.Cache) ([]byte, error) {
-	cachedRes, err := cache.Get(url)
-	if err == nil {
+	if cachedRes, err := cache.Get(url); err == nil {
 		return cachedRes, nil
 	}
 	res, err := http.Get(url)
 	if err != nil {
-		return []byte{}, fmt.Errorf("couldn't GET %s: %w", url, err)
+		return nil, fmt.Errorf("couldn't GET %s: %w", url, err)
 	}
 	defer res.Body.Close()
 
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		return nil, fmt.Errorf("%s: %s", url, res.Status)
+	}
+
 	bytes, err := io.ReadAll(res.Body)
 	if err != nil {
-		return []byte{}, fmt.Errorf("couldn't read response: %w", err)
+		return nil, fmt.Errorf("couldn't read response: %w", err)
 	}
 	cache.Add(url, bytes)
 	return bytes, nil
