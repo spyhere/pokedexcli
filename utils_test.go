@@ -11,7 +11,7 @@ import (
 
 func TestGetPokemonString(t *testing.T) {
 	tests := []struct {
-		name    string // description of this test case
+		name    string
 		pokemon pokeClient.PokemonResponse
 		want    string
 	}{
@@ -21,36 +21,17 @@ func TestGetPokemonString(t *testing.T) {
 				Name:   "pikachu",
 				Height: 15,
 				Weight: 20,
-				Stats: []struct {
-					BaseStat int "json:\"base_stat,omitempty\""
-					Effort   int "json:\"effort,omitempty\""
-					Stat     struct {
-						Name string "json:\"name,omitempty\""
-						URL  string "json:\"url,omitempty\""
-					} "json:\"stat\""
-				}{
+				Stats: []pokeClient.PokeStats{
 					{
 						BaseStat: 40,
-						Stat: struct {
-							Name string "json:\"name,omitempty\""
-							URL  string "json:\"url,omitempty\""
-						}{
+						Stat: pokeClient.PokeStat{
 							Name: "attack",
 						},
 					},
 				},
-				Types: []struct {
-					Slot int "json:\"slot,omitempty\""
-					Type struct {
-						Name string "json:\"name,omitempty\""
-						URL  string "json:\"url,omitempty\""
-					} "json:\"type\""
-				}{
+				Types: []pokeClient.PokeTypes{
 					{
-						Type: struct {
-							Name string "json:\"name,omitempty\""
-							URL  string "json:\"url,omitempty\""
-						}{
+						Type: pokeClient.PokeType{
 							Name: "electric",
 						},
 					},
