@@ -139,3 +139,36 @@ func TestRunCommand(t *testing.T) {
 		})
 	}
 }
+
+func TestCleanInput(t *testing.T) {
+	testCases := []struct {
+		input    string
+		expected []string
+	}{
+		{
+			input:    " ",
+			expected: []string{},
+		},
+		{
+			input:    " hello ",
+			expected: []string{"hello"},
+		},
+		{
+			input:    " hello world ",
+			expected: []string{"hello", "world"},
+		},
+		{
+			input:    "SoMe CrazY Text ",
+			expected: []string{"some", "crazy", "text"},
+		},
+	}
+	for _, c := range testCases {
+		actual := main.CleanInput(c.input)
+		for i := range c.expected {
+			if actual[i] != c.expected[i] {
+				t.Errorf("not equal: %v, %v", actual[i], c.expected[i])
+				t.Fail()
+			}
+		}
+	}
+}
