@@ -7,53 +7,53 @@ import (
 	"os"
 )
 
-type cliCommand struct {
-	name        string
-	description string
-	cb          func(*Config, ...string) error
+type CliCommand struct {
+	Name        string
+	Description string
+	Cb          func(*Config, ...string) error
 }
 
-func GetCommands() map[string]cliCommand {
-	return map[string]cliCommand{
+func GetCommands() map[string]CliCommand {
+	return map[string]CliCommand{
 		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			cb:          commandExit,
+			Name:        "exit",
+			Description: "Exit the Pokedex",
+			Cb:          commandExit,
 		},
 		"help": {
-			name:        "help",
-			description: "Read help of Pokedex",
-			cb:          commandHelp,
+			Name:        "help",
+			Description: "Read help of Pokedex",
+			Cb:          commandHelp,
 		},
 		"map": {
-			name:        "map",
-			description: "Show next 20 locations",
-			cb:          commandMap,
+			Name:        "map",
+			Description: "Show next 20 locations",
+			Cb:          commandMap,
 		},
 		"mapb": {
-			name:        "mapb",
-			description: "Show previous 20 locations",
-			cb:          commandMapb,
+			Name:        "mapb",
+			Description: "Show previous 20 locations",
+			Cb:          commandMapb,
 		},
 		"explore": {
-			name:        "explore",
-			description: "Let you explore pokemons in specific location area",
-			cb:          commandExplore,
+			Name:        "explore",
+			Description: "Let you explore pokemons in specific location area",
+			Cb:          commandExplore,
 		},
 		"catch": {
-			name:        "catch",
-			description: "Try to catch the pokemon by name",
-			cb:          commandCatch,
+			Name:        "catch",
+			Description: "Try to catch the pokemon by name",
+			Cb:          commandCatch,
 		},
 		"inspect": {
-			name:        "inspect",
-			description: "Inspect the stats of the pokemon in your possession",
-			cb:          commandInspect,
+			Name:        "inspect",
+			Description: "Inspect the stats of the pokemon in your possession",
+			Cb:          commandInspect,
 		},
 		"pokedex": {
-			name:        "pokedex",
-			description: "Display pokemons that you have caught",
-			cb:          commandPokedex,
+			Name:        "pokedex",
+			Description: "Display pokemons that you have caught",
+			Cb:          commandPokedex,
 		},
 	}
 }
@@ -67,7 +67,7 @@ func commandExit(c *Config, _ ...string) error {
 func commandHelp(c *Config, _ ...string) error {
 	commandDescription := ""
 	for _, it := range GetCommands() {
-		commandDescription += fmt.Sprintf("%s: %s\n", it.name, it.description)
+		commandDescription += fmt.Sprintf("%s: %s\n", it.Name, it.Description)
 	}
 	fmt.Printf(`Welcome to the Pokedex!
 Usage:

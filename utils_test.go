@@ -1,6 +1,7 @@
 package main_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -77,6 +78,63 @@ Types:
 				if it != expected[idx] {
 					t.Errorf("got %v, want %v", it, expected[idx])
 				}
+			}
+		})
+	}
+}
+
+func TestRunCommand(t *testing.T) {
+	commands := map[string]main.CliCommand{
+		"help": {
+			Name:        "help",
+			Description: "help cmd",
+			Cb: func(c *main.Config, s ...string) error {
+				return fmt.Errorf("help:%s", strings.Join(s, ","))
+			},
+		},
+		"test": {
+			Name:        "test",
+			Description: "test cmd",
+			Cb: func(c *main.Config, s ...string) error {
+				return fmt.Errorf("test:%s", strings.Join(s, ","))
+			},
+		},
+	}
+	config := &main.Config{}
+	tests := []struct {
+		name     string
+		c        *main.Config
+		words    []string
+		commands map[string]main.CliCommand
+		wantErr  string
+	}{
+		{
+			name:     "Should call test command with given arguments",
+			c:        config,
+			words:    []string{"test", "arg1", "arg2"},
+			commands: commands,
+			wantErr:  "test:arg1,arg2",
+		},
+		{
+			name:     "Should call 'help' with given arguments if command not found",
+			c:        config,
+			words:    []string{"kill", "arg1"},
+			commands: commands,
+			wantErr:  "help:arg1",
+		},
+		{
+			name:     "Should call 'help' without arguments",
+			c:        config,
+			words:    []string{"help"},
+			commands: commands,
+			wantErr:  "help:",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotErr := main.RunCommand(tt.c, tt.words, tt.commands)
+			if gotErr.Error() != tt.wantErr {
+				t.Fatalf("\n--Got--\n%s\n--Want--\n%s\n", gotErr.Error(), tt.wantErr)
 			}
 		})
 	}

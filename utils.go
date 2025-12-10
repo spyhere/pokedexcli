@@ -37,3 +37,15 @@ Stats:
 	)
 	return output
 }
+
+func RunCommand(c *Config, words []string, commands map[string]CliCommand) error {
+	args := []string{}
+	if len(words) > 1 {
+		args = words[1:]
+	}
+	command, ok := commands[words[0]]
+	if !ok {
+		return commands["help"].Cb(c, args...)
+	}
+	return command.Cb(c, args...)
+}

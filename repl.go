@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func Repl(c *Config, scanner *bufio.Scanner, commands map[string]cliCommand) {
+func Repl(c *Config, scanner *bufio.Scanner, commands map[string]CliCommand) {
 	for {
 		fmt.Print("Pokedex > ")
 		ok := scanner.Scan()
@@ -14,16 +14,7 @@ func Repl(c *Config, scanner *bufio.Scanner, commands map[string]cliCommand) {
 			log.Fatal("failed reading the text")
 		}
 		words := CleanInput(scanner.Text())
-		args := []string{}
-		if len(words) > 1 {
-			args = words[1:]
-		}
-		command, ok := commands[words[0]]
-		if !ok {
-			commands["help"].cb(c, args...)
-			continue
-		}
-		err := command.cb(c, args...)
+		err := RunCommand(c, words, commands)
 		if err != nil {
 			log.Fatal(err)
 		}
