@@ -1,7 +1,9 @@
-package main
+package main_test
 
 import (
 	"testing"
+
+	main "github.com/spyhere/pokedexcli"
 )
 
 type testCase struct {
@@ -29,7 +31,7 @@ func TestCleanInput(t *testing.T) {
 		},
 	}
 	for _, c := range testCases {
-		actual := CleanInput(c.input)
+		actual := main.CleanInput(c.input)
 		for i := range c.expected {
 			if actual[i] != c.expected[i] {
 				t.Errorf("not equal: %v, %v", actual[i], c.expected[i])
